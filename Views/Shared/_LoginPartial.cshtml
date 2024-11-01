@@ -1,0 +1,28 @@
+@{
+    var userInfo = ViewBag.UserInfo as UserInfo;
+}
+
+@if (Context.User.Identity != null && Context.User.Identity.IsAuthenticated)
+{
+    <form method="post" asp-controller="auth" asp-action="logout" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right gap-2">
+            <li>
+                <a class="btn btn-secondary text-white font-regular text-sm border-0 px-3 nav-link" asp-controller="auth" asp-action="login">Profile</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-primary px-3 text-white font-regular text-sm nav-link border-0">Logout</button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right gap-2">
+        <li>
+            <a class="btn btn-secondary text-white font-regular text-sm px-3 nav-link" asp-controller="auth" asp-action="login">Log In</a>
+        </li>
+        <li>
+            <a class="btn btn-primary text-white font-regular text-sm px-3 nav-link" asp-controller="auth" asp-action="register">Sign Up</a>
+        </li>
+    </ul>
+}

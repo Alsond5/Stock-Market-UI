@@ -1,0 +1,53 @@
+@model StockMarketUI.Models.LoginViewModel
+
+@{
+    Layout = "~/Views/Auth/_Layout.cshtml";
+}
+
+<div id="main-wrapper" class="auth-customizer-none">
+    <div class="position-relative overflow-hidden radial-gradient min-vh-100 w-100">
+        <div class="position-relative z-index-5">
+            <div class="row">
+                <div class="image-content col-xl-7 col-xxl-8">
+                    <a href="../main/index.html" class="text-nowrap logo-img d-block px-4 py-10 w-100">
+                        <img src="~/images/dark-logo.svg" class="dark-logo" alt="Logo-Dark">
+                    </a>
+                    <div class="d-none d-xl-flex align-items-center justify-content-center h-n80">
+                        <img src="~/images/login-security.svg" alt="modernize-img" class="img-fluid"
+                            width="500">
+                    </div>
+                </div>
+                <div class="col-xl-5 col-xxl-4">
+                    <div
+                        class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
+                        <div class="auth-max-width col-sm-8 col-md-6 col-xl-7 px-4">
+                            <h2 class="mb-1 fs-7 fw-bolder">Welcome to Stock Market</h2>
+                            <p class="mb-7">Buy & Sell Stock</p>
+                            <form asp-action="Login">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="mb-3">
+                                    <label asp-for="UsernameOrEmail" class="control-label">Username</label>
+                                    <input type="text" class="form-control" asp-for="UsernameOrEmail" aria-describedby="emailHelp">
+                                    <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label asp-for="Password" class="control-label">Password</label>
+                                    <input type="password" class="form-control" asp-for="Password">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <input type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2" value="Sign In">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <p class="fs-4 mb-0 fw-medium">New to Stock Market?</p>
+                                    <a href="@Url.Action("Register", "Auth")" class="text-primary fw-medium ms-2">Create an account</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

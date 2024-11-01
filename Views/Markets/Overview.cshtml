@@ -1,0 +1,54 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Active</th>
+            <th scope="col">Last Update</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div class="d-flex flex-column font-weight-bold">
+                        <div class="text-dark font-bold font-lg m-0">
+                            @item.StockSymbol
+                        </div>
+                        <div class="text-muted font-sm">
+                            @item.StockName
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td>@item.Quantity</td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Deactive</span>
+                    }
+                </td>
+                <td>@item.LastUpdated</td>
+                <td>
+                    <div class="d-flex gap-3">
+                        <a asp-controller="markets" asp-action="price" asp-route-id="@item.StockSymbol">
+                            <img width="20" height="20" src="~/images/details.svg" alt="">
+                        </a>
+                        <a asp-controller="trade" asp-action="details" asp-route-id="@item.StockId">
+                            <img width="20" height="20" src="~/images/trade.svg" alt="">
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

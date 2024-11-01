@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    var userInfo = ViewBag.UserInfo as UserInfo;
+}
+
+<div class="text-center">
+    @if (userInfo != null)
+    {
+        <h1 class="display-4">Welcome @userInfo.Username</h1>
+        <h2 class="display-5">@userInfo.Email</h2>
+        <h3 class="display-5">@userInfo.Balance TL</h3>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome</h1>
+    }
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
