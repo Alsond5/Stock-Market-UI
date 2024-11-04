@@ -1,5 +1,5 @@
 @{
-    var userInfo = ViewBag.userInfo as UserDetails;
+    var userInfo = ViewBag.UserInfo as UserInfo;
 }
 
 <div class="d-flex flex-column mt-5">
@@ -10,8 +10,15 @@
                     <img class="" width="64" height="64" src="~/images/user.png" alt="">
                 </div>
             </div>
-            <div class="align-self-start">
-                <h3 class="text-xl font-semibold">Alsond5</h3>
+            <div class="d-flex flex-column">
+                <div class="align-self-start">
+                    <h3 class="text-xl font-semibold">@userInfo!.Username</h3>
+                </div>
+                <div class="d-flex">
+                    <button class="btn btn-light rounded-circle text-sm py-1 px-2 font-medium">
+                        <img width="12" height="12" src="~/images/pencil.svg" alt="">
+                    </button>
+                </div>
             </div>
         </div>
         <div class="bg-dark-subtle h-100" style="width: 1px;"></div>
@@ -21,7 +28,7 @@
                     <h3 class="text-base font-bold text-muted">User ID</h3>
                 </div>
                 <div>
-                    <p class="text-base text-dark">151515</p>
+                    <p class="text-base text-dark">@userInfo.UserId</p>
                 </div>
             </div>
             <div class="">
@@ -29,7 +36,7 @@
                     <h3 class="text-base font-bold text-muted">User Type</h3>
                 </div>
                 <div>
-                    <p class="text-base text-dark">Personal</p>
+                    <p class="text-base text-dark">@userInfo.RoleName</p>
                 </div>
             </div>
             <div class="">
@@ -37,7 +44,7 @@
                     <h3 class="text-base font-bold text-muted">Total Stocks</h3>
                 </div>
                 <div>
-                    <p class="text-base text-dark">3</p>
+                    <p class="text-base text-dark">@userInfo.TotalStocks</p>
                 </div>
             </div>
         </div>
@@ -49,7 +56,7 @@
             </div>
             <div class="d-flex gap-1">
                 <div>
-                    <h3 class="text-3xl font-bold text-dark m-0">10000</h3>
+                    <h3 class="text-3xl font-bold text-dark m-0">@ViewBag.EstimatedBalance</h3>
                 </div>
                 <div class="align-self-end">
                     <p class="text-muted text-xl font-semibold" style="margin-bottom: 2px;">TL</p>
@@ -57,7 +64,7 @@
             </div>
         </div>
         <div class="d-flex">
-            <button class="btn btn-light bg-dark-subtle font-bold">Deposit</button>
+            <button class="btn btn-light bg-dark-subtle font-semibold">Deposit</button>
         </div>
     </div>
     <div class="d-flex flex-column p-4 mt-5 border rounded">
@@ -106,25 +113,57 @@
                         <td>
                             <div class="d-flex flex-column m-0">
                                 <div class="text-dark font-semibold text-base m-0">
-                                    AEFES
+                                    TL
                                 </div>
                                 <div class="text-muted text-xs">
-                                    ANADOLU EFES
+                                    TURKISH LIRAS
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex flex-column m-0">
                                 <div class="text-dark font-semibold text-base m-0">
-                                    205
+                                    @userInfo.Balance
                                 </div>
                                 <div class="text-muted text-xs">
-                                    1305.85 TL
+                                    @userInfo.Balance TL
                                 </div>
                             </div>
                         </td>
-                        <td>185.55</td>
+                        <td>1 TL</td>
                     </tr>
+                    @foreach (var item in Model) {
+                        <tr id="@item.HoldingId" class="font-medium">
+                            <td>
+                                <div class="d-flex flex-column m-0">
+                                    <div class="text-dark font-semibold text-base m-0">
+                                        @item.Stock.StockSymbol
+                                    </div>
+                                    <div class="text-muted text-xs">
+                                        @item.Stock.StockName
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column m-0">
+                                    <div class="text-dark font-semibold text-base m-0">
+                                        @item.Quantity
+                                    </div>
+                                    <div class="text-muted text-xs">
+                                        @(item.Quantity * item.Stock.Price) TL
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@item.Stock.Price TL</td>
+                            <td>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <a class="btn btn-light" asp-controller="profile" asp-action="transactions" asp-route-id="@item.Stock.StockSymbol">
+                                        <img width="12" height="12" src="~/images/transactions.svg" alt="">
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>

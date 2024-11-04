@@ -1,0 +1,100 @@
+<div class="d-flex flex-column">
+    <div class="m-0">
+        <h2 class="text-dark font-bold text-3xl">Transaction History</h2>
+    </div>
+    <div class="text-muted text-xs">
+        Your transactions
+    </div>
+    <div class="mt-5">
+        <div>
+            <table class="table table-hover m-0 mt-3">
+                <thead class="bg-dark-subtle">
+                    <tr class="text-muted font-bold">
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Time
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Type
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Stock
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Price
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Quantity
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Commission
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Status
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr id="@item.TransactionId" class="font-medium">
+                            <td>@item.TransactionDate</td>
+                            @if (item.TransactionType == "buy")
+                            {
+                                <td class="uppercase text-success">@item.TransactionType</td>
+                            }
+                            else
+                            {
+                                <td class="uppercase text-danger">@item.TransactionType</td>
+                            }
+                            <td>
+                                <div class="d-flex flex-column m-0">
+                                    <div class="text-dark text-base m-0">
+                                        @item.Stock.StockSymbol
+                                    </div>
+                                    <div class="text-muted text-xs">
+                                        @item.Stock.StockName
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@item.PricePerUnit TL</td>
+                            <td>
+                                <div class="d-flex flex-column m-0">
+                                    <div class="text-dark text-base m-0">
+                                        @item.Quantity
+                                    </div>
+                                    <div class="text-muted text-xs">
+                                        @(item.Quantity * item.PricePerUnit) TL
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@item.Commission TL</td>
+                            <td>
+                                <p class="text-success">Successful</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
