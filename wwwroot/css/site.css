@@ -115,3 +115,27 @@ body {
 .font-bold {
   font-weight: 700 !important;
 }
+
+.w-70 {
+  width: 70%;
+}
+
+.w-30 {
+  width: 30%;
+}
+
+@media (min-width: 780px) {
+  .w-md-50 {
+    width: 50% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .w-lg-70 {
+    width: 70% !important;
+  }
+
+  .w-lg-30 {
+    width: 30% !important;
+  }
+}
