@@ -2,6 +2,7 @@
 
 @{
     var success = ViewBag?.Success;
+    var stock = @ViewBag!.Stock as Stock;
 }
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -40,29 +41,29 @@
             <ol class="breadcrumb text-md">
                 <li class="breadcrumb-item"><a class="text-muted text-sm text-decoration-none font-regular" href="#">Home</a></li>
                 <li class="breadcrumb-item"><a class="text-muted text-sm text-decoration-none font-regular" href="#">Stock prices</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><span class="text-black text-sm font-regular">@ViewBag.Stock.StockSymbol Price</span></li>
+                <li class="breadcrumb-item active" aria-current="page"><span class="text-black text-sm font-regular">@stock!.StockSymbol Price</span></li>
             </ol>
         </nav>
     </div>
     <div class="d-flex align-items-center mt-3">
         <div>
-            <h1 class="font-bold text-3xl">@ViewBag.Stock.StockName Price <span class="text-xl text-muted">(@ViewBag.Stock.StockSymbol)</span></h1>
+            <h1 class="font-bold text-3xl">@stock.StockName Price <span class="text-xl text-muted">(@stock.StockSymbol)</span></h1>
         </div>
     </div>
     <div class="d-flex flex-column flex-xl-row w-100 mt-3">
         <div class="w-100 w-lg-70">
             <div class="d-flex gap-3 align-items-center">
-                <h3 class="font-bold text-2xl m-0">@ViewBag.Stock.Price TL</h3>
+                <h3 class="font-bold text-2xl m-0">@stock.Price TL</h3>
                 <p class="text-xl font-bold text-success m-0 mt-1">+3.55%</p>
             </div>
         </div>
         <div class="w-100 w-md-50 w-lg-30 mt-5 mt-xl-0">
             <div class="rounded border p-3 w-100">
-                <form asp-controller="markets" asp-route-id="@ViewBag.Stock.StockSymbol" method="post">
-                    <input type="text" asp-for="StockId" value="@ViewBag.Stock.StockId" hidden>
-                    <input type="text" asp-for="StockSymbol" value="@ViewBag.Stock.StockSymbol" hidden>
+                <form asp-controller="markets" asp-route-id="@stock.StockSymbol" method="post">
+                    <input type="text" asp-for="StockId" value="@stock.StockId" hidden>
+                    <input type="text" asp-for="StockSymbol" value="@stock.StockSymbol" hidden>
                     <div class="position-relative">
-                        <h3 class="font-bold text-lg">Buy & Sell @ViewBag.Stock.StockSymbol</h3>
+                        <h3 class="font-bold text-lg">Buy & Sell @stock.StockSymbol</h3>
                         <span class="d-block w-25 bg-primary" style="height: 3px;"></span>
                     </div>
                     <div class="d-flex flex-column gap-3 mt-5">
@@ -84,7 +85,7 @@
                                 <svg class="bn-svg" style="width: 12px; height: 12px;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 3h3v18.5l-7-7h4V3zM16.5 21h-3V2.5l7 7h-4V21z" fill="currentColor"></path></svg>
                             </div>
                             <div class="text-xs text-muted">
-                                1 <!-- -->@ViewBag.Stock.StockSymbol<!-- --> ≈ <!-- -->@ViewBag.Stock.Price <!-- -->TL<!-- -->
+                                1 <!-- -->@stock.StockSymbol<!-- --> ≈ <!-- -->@stock.Price <!-- -->TL<!-- -->
                             </div>
                         </div>
                         <div class="w-100 rounded border d-flex gap-3 p-3">
@@ -108,8 +109,8 @@
                         </div>
                     </div>
                     <div class="d-flex gap-3 mt-5">
-                        <button asp-action="buy" class="btn btn-success w-100 py-2">Buy @ViewBag.Stock.StockSymbol</button>
-                        <button asp-action="sell" class="btn btn-danger w-100 py-2">Sell @ViewBag.Stock.StockSymbol</button>
+                        <button asp-action="buy" class="btn btn-success w-100 py-2">Buy @stock.StockSymbol</button>
+                        <button asp-action="sell" class="btn btn-danger w-100 py-2">Sell @stock.StockSymbol</button>
                     </div>
                 </form>
             </div>
@@ -125,7 +126,7 @@
         console.log("Girdi");
         
         const totalValue = e.target.value;
-        const price = parseFloat("@ViewBag.Stock.Price".replace(',', '.'));
+        const price = parseFloat("@stock.Price".replace(',', '.'));
         const quantity = Math.trunc(totalValue / price);
         document.querySelector('input[placeholder="0"]').value = quantity;
     });
@@ -135,7 +136,7 @@
         console.log("Girdi2");
         
         const quantity = e.target.value;
-        const price = parseFloat("@ViewBag.Stock.Price".replace(',', '.'));
+        const price = parseFloat("@stock.Price".replace(',', '.'));
         const totalValue = (quantity * price).toFixed(2);
         document.querySelector('input[placeholder="10 - 50,000"]').value = totalValue;
     });

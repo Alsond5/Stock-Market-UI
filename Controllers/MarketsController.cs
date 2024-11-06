@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -47,6 +48,8 @@ namespace StockMarketUI.Controllers
             }
 
             var stock = await response.Content.ReadFromJsonAsync<Stock>();
+            if (stock == null) return Error();
+
             ViewBag.Stock = stock;
 
             return View();
@@ -89,6 +92,8 @@ namespace StockMarketUI.Controllers
             ViewBag.Success = "success";
             ViewBag.Stock = holding!.Stock;
 
+            HttpContext.Session.Remove("UserInfo");
+
             return View("Price", model);
         }
 
@@ -129,7 +134,16 @@ namespace StockMarketUI.Controllers
             ViewBag.Success = "success";
             ViewBag.Stock = holding!.Stock;
 
+            HttpContext.Session.Remove("UserInfo");
+
             return View("Price", model);
+        }
+
+        
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

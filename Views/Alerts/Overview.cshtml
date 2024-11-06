@@ -1,0 +1,207 @@
+@model StockMarketUI.Models.AlertViewModel
+
+@{
+    var alerts = ViewBag.Alerts as List<Alert> ?? [];
+    var stocks = ViewBag.Stocks as List<Stock> ?? [];
+}
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Create Price Alert</h5>
+                <button type="button" class="close" data-target="#exampleModalCenter" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-controller="alerts" asp-action="create" method="post">
+                <div class="modal-body d-flex flex-column gap-3">
+                    <div class="form-group col">
+                        <label asp-for="StockId" class="row-sm-2 row-form-label">Stock Id</label>
+                        <div class="row-sm-10">
+                            <input type="number" class="form-control" asp-for="StockId">
+                        </div>
+                    </div>
+                    <div class="form-group col">
+                        <label asp-for="LowerLimit" class="row-sm-2 row-form-label">Lower Limit</label>
+                        <div class="row-sm-10">
+                            <input type="number" class="form-control" asp-for="LowerLimit" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group col">
+                        <label asp-for="UpperLimit" class="row-sm-2 row-form-label">Upper Limit</label>
+                        <div class="row-sm-10">
+                            <input type="number" class="form-control" asp-for="UpperLimit" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning text-sm" data-target="#exampleModalCenter" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary text-sm" data-create="alert">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateModalCenter" tabindex="-1" role="dialog" aria-labelledby="updateModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Price Alert</h5>
+                <button type="button" class="close" data-target="#updateModalCenter" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-controller="alerts" asp-action="create" method="post">
+                <div class="modal-body d-flex flex-column gap-3">
+                    <div class="form-group col">
+                        <label asp-for="Id" class="row-sm-2 row-form-label">Id</label>
+                        <div class="row-sm-10">
+                            <input type="number" class="form-control" asp-for="Id">
+                        </div>
+                    </div>
+                    <div class="form-group col">
+                        <label asp-for="LowerLimit" class="row-sm-2 row-form-label">Lower Limit</label>
+                        <div class="row-sm-10">
+                            <input type="number" class="form-control" asp-for="LowerLimit" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group col">
+                        <label asp-for="UpperLimit" class="row-sm-2 row-form-label">Upper Limit</label>
+                        <div class="row-sm-10">
+                            <input type="number" class="form-control" asp-for="UpperLimit" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning text-sm" data-target="#updateModalCenter" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary text-sm" data-update="alert">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-column">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <div class="m-0">
+                <h2 class="text-dark font-bold text-3xl">Price Alerts</h2>
+            </div>
+            <div class="text-muted text-xs">
+                Your alerts
+            </div>
+        </div>
+        <div>
+            <button data-target="#exampleModalCenter" data-toggle="modal" class="btn btn-primary text-sm">Create Alert</button>
+        </div>
+    </div>
+    <div class="mt-5">
+        <form method="get" asp-controller="alerts" asp-action="overview">
+            <div class="form-group col">
+                <label for="stockFilter" class="row-sm-2 row-form-label">Filter by Stock:</label>
+                <div class="row-sm-10 my-3">
+                    <select id="stockFilter" name="stock-id" class="form-control">
+                        <option value="">Select a stock</option>
+                        @foreach (var stock in stocks)
+                        {
+                            <option value="@stock.StockId">@stock.StockSymbol</option>
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary text-sm">Apply Filter</button>
+            </div>
+        </form>
+    </div>
+    <div class="mt-5">
+        <div>
+            <table class="table table-hover m-0 mt-3">
+                <thead class="bg-dark-subtle">
+                    <tr class="text-muted font-bold">
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Stock
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Lower Limit
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Upper Limit
+                                <img width="12" height="12" src="~/images/sort.png" alt="">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center gap-2">
+                                Actions
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in alerts) {
+                        <tr class="font-medium">
+                            <td>
+                                <div class="d-flex flex-column m-0">
+                                    <div class="text-dark text-base m-0">
+                                        @item.StockSymbol
+                                    </div>
+                                    <div class="text-muted text-xs">
+                                        @item.StockName
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@item.LowerLimit</td>
+                            <td>@item.UpperLimit</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <button type="button" class="btn btn-warning text-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#updateModalCenter"
+                                            data-id="@item.Id"
+                                            data-stock-id="@item.StockId"
+                                            data-lower-limit="@item.LowerLimit"
+                                            data-upper-limit="@item.UpperLimit">
+                                        Update
+                                    </button>
+                                    <form asp-action="delete" asp-route-id="@item.Id" method="post">
+                                        <button type="submit" class="btn btn-danger text-sm">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#updateModalCenter').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Tetikleyen butonu al
+            console.log(button);
+            var id = button.data('id'); // Alert ID
+            var stockId = button.data('stock-id'); // Stock Id
+            var lowerLimit = button.data('lower-limit'); // Lower Limit
+            var upperLimit = button.data('upper-limit'); // Upper Limit
+
+            console.log(id, stockId, lowerLimit, upperLimit);
+
+            var modal = $(this);
+            modal.find('input[name="Id"]').val(id);
+            modal.find('input[name="LowerLimit"]').val(parseFloat(lowerLimit));
+            modal.find('input[name="UpperLimit"]').val(parseFloat(upperLimit));
+
+            // Güncelleme formuna alert ID'sini route parametresi olarak ekleyelim
+            modal.find('form').attr('action', '/alerts/update/' + id);
+        });
+    </script>
+}

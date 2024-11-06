@@ -12,15 +12,23 @@ namespace StockMarketUI.Controllers
     {
         private readonly IHttpClientFactory _httpClient = httpClient;
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
+            return RedirectToAction("overview", "alerts");
+        }
+        
+        public async Task<IActionResult> Overview()
+        {
+            var stockId = Request.Query.ContainsKey("stock-id") ? Request.Query["stock-id"].ToString() : null;
+
             var tokenType = HttpContext.Session.GetString("TokenType") ?? "Bearer";
             var accessToken = HttpContext.Session.GetString("Token");
 
             var client = _httpClient.CreateClient("StockMarketAPI");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
-            
-            var response = await client.GetAsync("/api/alerts/@me/alerts");
+
+            var url = stockId != null ? $"/api/alerts/@me/alerts/stock/{int.Parse(stockId)}" : "/api/alerts/@me/alerts";
+            var response = await client.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -29,6 +37,16 @@ namespace StockMarketUI.Controllers
 
             var alerts = await response.Content.ReadFromJsonAsync<List<Alert>>();
             ViewBag.Alerts = alerts;
+
+            response = await client.GetAsync("/api/stocks/all");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return View();
+            }
+
+            var stocks = await response.Content.ReadFromJsonAsync<List<Stock>>();
+            ViewBag.Stocks = stocks;
 
             return View();
         }
@@ -62,7 +80,7 @@ namespace StockMarketUI.Controllers
             {
                 Console.WriteLine("Invalid alert attempt");
                 ModelState.AddModelError(string.Empty, "Invalid alert attempt");
-                return RedirectToAction("Index");
+                return RedirectToAction("Overview");
             }
 
             var tokenType = HttpContext.Session.GetString("TokenType") ?? "Bearer";
@@ -76,10 +94,10 @@ namespace StockMarketUI.Controllers
             if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError(string.Empty, "Failed to create alert");
-                return RedirectToAction("Index");
+                return RedirectToAction("Overview");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Overview");
         }
 
         [HttpPost]
@@ -105,7 +123,7 @@ namespace StockMarketUI.Controllers
                 return View();
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Overview");
         }
 
         [HttpPost]
@@ -124,7 +142,7 @@ namespace StockMarketUI.Controllers
                 ModelState.AddModelError(string.Empty, "Failed to delete alert");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Overview");
         }
     }
 }

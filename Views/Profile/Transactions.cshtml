@@ -1,11 +1,37 @@
 <div class="d-flex flex-column">
-    <div class="m-0">
-        <h2 class="text-dark font-bold text-3xl">Transaction History</h2>
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <div class="m-0">
+                <h2 class="text-dark font-bold text-3xl">Transaction History</h2>
+            </div>
+            <div class="text-muted text-xs">
+                Your transactions
+            </div>
+        </div>
     </div>
-    <div class="text-muted text-xs">
-        Your transactions
+    <div class="d-flex align-items-center justify-content-between mt-5">
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3 text-sm">
+                <div>
+                    <label for="startDate" class="form-label">Start Date</label>
+                    <input type="date" id="startDate" class="form-control text-sm">
+                </div>
+                <div>
+                    <label for="endDate" class="form-label">End Date</label>
+                    <input type="date" id="endDate" class="form-control text-sm">
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="d-flex align-items-center gap-3">
+                <button id="export" class="btn border-success d-flex align-items-center justify-content-center rounded-lg gap-2">
+                    <img width="16" height="16" src="~/images/excel.png" alt="">
+                    <span class="text-success text-sm font-bold">Export</span>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="mt-5">
+    <div class="mt-3">
         <div>
             <table class="table table-hover m-0 mt-3">
                 <thead class="bg-dark-subtle">
@@ -98,3 +124,39 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#export').click(function () {
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+
+                $.ajax({
+                    url: '/Profile/ExportTransactions',
+                    method: 'GET',
+                    data: {
+                        startDate: startDate,
+                        endDate: endDate
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function (response) {
+                        const url = window.URL.createObjectURL(response);
+
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = 'transactions.xlsx';
+                        document.body.append(a);
+                        a.click();
+
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                    }
+                });
+            });
+        });
+    </script>
+}

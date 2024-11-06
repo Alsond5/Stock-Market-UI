@@ -32,8 +32,9 @@ namespace StockMarketUI.Controllers
 
             var estimatedBalance = holdings.Sum(h => h.Stock.Price * h.Quantity);
             ViewBag.EstimatedBalance = estimatedBalance + userInfo!.Balance;
+            ViewBag.Holdings = holdings;
 
-            return View(holdings);
+            return View();
         }
 
         public async Task<IActionResult> Transactions(string? id)
@@ -53,8 +54,30 @@ namespace StockMarketUI.Controllers
 
             var transactions = await response.Content.ReadFromJsonAsync<List<Transaction>>();
             if (transactions == null) return View(new List<Transaction>());
+            
+            transactions.Reverse();
 
             return View(transactions);
+        }
+
+        public async Task<IActionResult> ExportTransactions()
+        {
+            var startDate = Request.Query.ContainsKey("startDate") ? Request.Query["startDate"].ToString() : "2021-01-01";
+            var endDate = Request.Query.ContainsKey("endDate") ? Request.Query["endDate"].ToString() : "2024-12-31";
+            
+            var tokenType = HttpContext.Session.GetString("TokenType") ?? "Bearer";
+            var token = HttpContext.Session.GetString("Token");
+
+            var client = _httpClient.CreateClient("StockMarketAPI");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, token);
+
+            var response = await client.GetAsync($"/api/transactions/download?startDate={startDate}&endDate={endDate}");
+            if (!response.IsSuccessStatusCode) return StatusCode(500);
+            
+            var transactions = await response.Content.ReadAsStreamAsync();
+            if (transactions == null) return StatusCode(500);
+
+            return File(transactions, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "transactions.xlsx");
         }
     }
 }
