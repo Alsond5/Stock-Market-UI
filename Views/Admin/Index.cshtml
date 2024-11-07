@@ -1,0 +1,86 @@
+@* AdminIndex.cshtml *@
+<div class="container mt-5">
+    <h2 class="text-muted">Site Administration</h2>
+    <div class="row mt-5">
+        <!-- Left Column for Panels -->
+        <div class="col-md-9">
+            <div class="card text-base">
+                <div class="card-header bg-primary font-bold text-white">
+                    Authentication and Authorization
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <a class="nav nav-link" asp-controller="admin" asp-action="users"><span class="text-primary-emphasis font-medium">Users</span></a>
+                        <div class="d-flex text-sm">
+                            <a href="#" class="nav-link text-primary mr-2">➕ Add</a>
+                            <a href="#" class="nav-link text-primary">✏️ Change</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card mt-5">
+                <div class="card-header bg-primary font-bold text-white">
+                    Stock Market
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <a class="nav nav-link" asp-controller="admin" asp-action="stockmarket" asp-route-id="alerts"><span class="text-primary-emphasis font-medium">Alerts</span></a>
+                        <div class="d-flex text-sm">
+                            <a href="#" class="nav-link text-primary mr-2">➕ Add</a>
+                            <a href="#" class="nav-link text-primary">✏️ Change</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <a class="nav nav-link" asp-controller="admin" asp-action="stockmarket" asp-route-id="balances"><span class="text-primary-emphasis font-medium">Balances</span></a>
+                        <div class="d-flex text-sm">
+                            <a href="#" class="nav-link text-primary mr-2">➕ Add</a>
+                            <a href="#" class="nav-link text-primary">✏️ Change</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <a class="nav nav-link" asp-controller="admin" asp-action="stockmarket" asp-route-id="stocks"><span class="text-primary-emphasis font-medium">Stocks</span></a>
+                        <div class="d-flex text-sm">
+                            <a href="#" class="nav-link text-primary mr-2">➕ Add</a>
+                            <a href="#" class="nav-link text-primary">✏️ Change</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <a class="nav nav-link" asp-controller="admin" asp-action="stockmarket" asp-route-id="transactions"><span class="text-primary-emphasis font-medium">Transactions</span></a>
+                        <div class="d-flex text-sm">
+                            <a href="#" class="nav-link text-primary mr-2">➕ Add</a>
+                            <a href="#" class="nav-link text-primary">✏️ Change</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <a class="nav nav-link" asp-controller="admin" asp-action="stockmarket" asp-route-id="holdings"><span class="text-primary-emphasis font-medium">Holdings</span></a>
+                        <div class="d-flex text-sm">
+                            <a href="#" class="nav-link text-primary mr-2">➕ Add</a>
+                            <a href="#" class="nav-link text-primary">✏️ Change</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <a class="nav nav-link" asp-controller="admin" asp-action="stockmarket" asp-route-id="coupons"><span class="text-primary-emphasis font-medium">Coupons</span></a>
+                        <div class="d-flex text-sm">
+                            <a href="#" class="nav-link text-primary mr-2">➕ Add</a>
+                            <a href="#" class="nav-link text-primary">✏️ Change</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Column for Recent Actions -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-light">
+                    Recent Actions
+                </div>
+                <div class="card-body">
+                    <p class="card-text">My actions</p>
+                    <p class="text-muted">None available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

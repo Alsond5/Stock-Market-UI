@@ -1,0 +1,161 @@
+@using System.Text.Json.Nodes;
+@{
+    var data = ViewBag?.Data as List<JsonObject> ?? [];
+    var modelAttributes = ViewBag?.ModelAttributes as Dictionary<string, string> ?? new Dictionary<string, string>();
+    var modelTitle = ViewBag?.ModelTitle as string ?? "";
+}
+
+@functions {
+    public object GetValue(JsonObject obj, string propertyName)
+    {
+        if (obj == null) return "";
+
+        if (!propertyName.Contains("."))
+        {
+            return obj[propertyName] ?? "";
+        }
+
+        var properties = propertyName.Split(".");
+        var currentObj = obj;
+        for (int i = 0; i < properties.Length - 1; i++)
+        {
+            if (currentObj == null) return "";
+
+            var property = properties[i];
+            currentObj = currentObj[property] as JsonObject;
+        }
+
+        if (currentObj == null) return "";
+        
+        return currentObj[properties.Last()] ?? "";
+    }
+    
+    public string TitleCase(string str)
+    {
+        return str.Substring(0, 1).ToUpper() + str.Substring(1).ToLower();
+    }
+}
+
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb" class="d-flex align-items-center bg-info py-1">
+    <div class="container text-sm px-0">
+        <ol class="breadcrumb px-0 m-0 font-medium">
+            <li class="breadcrumb-item"><a class="nav nav-link text-white" href="#">Home</a></li>
+            <li class="breadcrumb-item"><a class="nav nav-link text-white" href="#">Stock Market</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><span class="nav nav-link text-muted">@TitleCase(modelTitle)</span></li>
+        </ol>
+    </div>
+</nav>
+<div class="container">
+    <!-- Page Title -->
+    <h3 class="my-4 font-bold text-muted">Select @modelTitle to change</h3>
+
+    <div class="row">
+        <!-- Main Content Area -->
+        <div class="col-lg-9">
+            <!-- Search and Action Bar -->
+            <div class="d-flex mb-3 gap-3">
+                <input type="text" class="form-control text-sm" placeholder="Search">
+                <button class="btn btn-outline-secondary ml-2 text-sm">Search</button>
+            </div>
+
+            <!-- Action Dropdown -->
+            <div class="d-flex align-items-center mb-3 mt-4 gap-3 text-sm">
+                <p class="m-0 text-muted font-medium">Action:</p>
+                <select class="form-select w-auto mr-2 text-sm">
+                    <option>-------------</option>
+                    <option>Delete selected users</option>
+                    <option>Mark as staff</option>
+                    <!-- Diğer aksiyonlar eklenebilir -->
+                </select>
+                <button class="btn btn-secondary text-sm">Go</button>
+            </div>
+
+            <!-- User Table -->
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr class="text-muted text-sm">
+                        <th><input type="checkbox" data-target="all"></th>
+                        @foreach (var modelAttribute in modelAttributes)
+                        {
+                            <th>@modelAttribute.Key</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in data)
+                    {
+                        <tr class="text-sm">
+                            <td><input type="checkbox" data-target="selected"></td>
+                            @for (int index = 0; index < modelAttributes.Count; index++)
+                            {
+                                var attribute = modelAttributes.ElementAt(index);
+                                var value = GetValue(item, attribute.Value);
+                                
+                                // if index is 0,
+                                @if (index == 0)
+                                {
+                                    <td><a asp-controller="admin" asp-action="users" asp-route-id="1" class="text-decoration-none font-medium">@value</a></td>
+                                }
+                                else if (value is bool)
+                                {
+                                    <td>@((bool)value ? "✔" : "")</td>
+                                }
+                                else
+                                {
+                                    <td>@value</td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-muted text-sm">
+                            <p class="m-0">@data.Count() @modelTitle</p>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Filter Sidebar -->
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    Filter
+                </div>
+                <div class="card-body">
+                    <h6>By staff status</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#">All</a></li>
+                        <li><a href="#">Yes</a></li>
+                        <li><a href="#">No</a></li>
+                    </ul>
+
+                    <h6>By superuser status</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#">All</a></li>
+                        <li><a href="#">Yes</a></li>
+                        <li><a href="#">No</a></li>
+                    </ul>
+                    
+                    <!-- Ek filtre seçenekleri eklenebilir -->
+                </div>
+            </div>
+            <!-- Add User Button -->
+            <button class="btn btn-secondary mt-3 w-100">Add User</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('input[data-target="all"]').change(function () {
+                var isChecked = $(this).prop('checked');
+                $('input[data-target="selected"]').prop('checked', isChecked);
+            });
+        });
+    </script>
+}

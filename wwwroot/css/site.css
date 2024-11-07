@@ -124,6 +124,14 @@ body {
   width: 30%;
 }
 
+.text-warning-emphasis {
+  color: #664d03 !important;
+}
+
+.table>:not(caption)>*>* {
+  padding: 1rem 1.3rem !important;
+}
+
 @media (min-width: 780px) {
   .w-md-50 {
     width: 50% !important;
