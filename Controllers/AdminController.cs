@@ -63,7 +63,7 @@ namespace StockMarketUI.Controllers
 
         public async Task<IActionResult> Users(int? id)
         {
-            if (id != null) return RedirectToAction("EditUser", new { id = id });
+            if (id != null) return RedirectToAction("upsert", new { id = "users", itemid = id });
 
             var tokenType = HttpContext.Session.GetString("tokenType") ?? "Bearer";
             var accessToken = HttpContext.Session.GetString("Token");
@@ -71,7 +71,7 @@ namespace StockMarketUI.Controllers
             var client = _clientFactory.CreateClient("StockMarketAPI");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
 
-            var response = await client.GetAsync($"/api/admin/users");
+            var response = await client.GetAsync($"/api/users/all");
             if (!response.IsSuccessStatusCode)
             {
                 return RedirectToAction("index", "admin");
@@ -80,11 +80,6 @@ namespace StockMarketUI.Controllers
             var users = await response.Content.ReadFromJsonAsync<List<UserInfo>>();
             ViewBag.Users = users;
 
-            return View();
-        }
-
-        public async Task<IActionResult> EditUser(int id)
-        {
             return View();
         }
 
@@ -119,19 +114,54 @@ namespace StockMarketUI.Controllers
             return View();
         }
 
-        public IActionResult Stocks()
+        public async Task<IActionResult> Upsert(string id)
         {
-            return View();
+            var queries = Request.Query;
+            // if query contains id and action
+            if (!queries.ContainsKey("itemid"))
+            {
+                return RedirectToAction("index", "admin");
+            }
+
+            var tokenType = HttpContext.Session.GetString("TokenType") ?? "Bearer";
+            var accessToken = HttpContext.Session.GetString("Token");
+
+            var client = _clientFactory.CreateClient("StockMarketAPI");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
+
+            var response = await client.GetAsync($"/api/{id}/{queries["itemid"]}");
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Failed to fetch data");
+                return RedirectToAction("index", "admin");
+            }
+
+            var data = await response.Content.ReadFromJsonAsync<JsonObject>();
+            if (data == null) return RedirectToAction("index", "admin");
+
+            return View(data);
         }
 
-        public IActionResult EditStock(string id)
+        [HttpPost]
+        public async Task<IActionResult> Upsert(string id, [FromBody] JsonObject model)
         {
-            return View();
-        }
+            Console.WriteLine($"Upserting {id} with model: {model.First().Key}: {model.First().Value}");
 
-        public IActionResult Transactions()
-        {
-            return View();
+            var itemid = Request.Query["itemid"];
+            var tokenType = HttpContext.Session.GetString("TokenType") ?? "Bearer";
+            var accessToken = HttpContext.Session.GetString("Token");
+
+            var client = _clientFactory.CreateClient("StockMarketAPI");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
+
+            var response = await client.PutAsJsonAsync($"/api/{id}/{itemid}", model);
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Failed to fetch data");
+                return RedirectToAction("index", "admin");
+            }
+
+            return RedirectToAction("StockMarket", new { id });
         }
     }
 }

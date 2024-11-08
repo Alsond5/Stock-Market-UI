@@ -95,7 +95,7 @@
                                 // if index is 0,
                                 @if (index == 0)
                                 {
-                                    <td><a asp-controller="admin" asp-action="users" asp-route-id="1" class="text-decoration-none font-medium">@value</a></td>
+                                    <td><a asp-controller="admin" asp-action="upsert" asp-route-id="@modelTitle" asp-route-action="change" asp-route-itemid="@item.First().Value" class="text-decoration-none font-medium">@value</a></td>
                                 }
                                 else if (value is bool)
                                 {

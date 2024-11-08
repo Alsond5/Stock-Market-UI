@@ -16,7 +16,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container text-sm">
                 <!-- Sol tarafta başlık -->
-                <a class="navbar-brand font-bold text-warning" href="#">Django Administration</a>
+                <a class="navbar-brand font-bold text-warning" href="#">StockMarket Administration</a>
 
                 <!-- Sağ tarafta bağlantılar -->
                 <div class="collapse navbar-collapse justify-content-end">
@@ -27,7 +27,7 @@
                                 <p class="m-0">Welcome,</p>
                             </div>
                             <div>
-                                <p class="m-0 p-1"><strong>Ubuntu</strong></p>
+                                <p class="m-0 p-1"><strong>@ViewBag.UserInfo.Username</strong></p>
                             </div>
                         </li>
                         <!-- "Change Password" bağlantısı -->
@@ -36,7 +36,9 @@
                         </li>
                         <!-- "Log Out" bağlantısı -->
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Log Out</a>
+                            <form method="post" asp-controller="auth" asp-action="logout" class="navbar-right">
+                                <button type="submit" class="btn btn-primary px-3 text-white font-regular text-sm nav-link border-0">Logout</button>
+                            </form>
                         </li>
                     </ul>
                 </div>

@@ -1,0 +1,45 @@
+@{}
+
+<div class="container mt-5">
+    <h2>Change @ViewBag.Title</h2>
+
+    <form method="post" class="needs-validation">
+        @StockMarketUI.Helpers.HtmlHelper.RenderForm(Model)
+
+        <button type="submit" asp-action="upsert" class="btn btn-primary">Save</button>
+        <button type="submit" asp-action="delete" class="btn btn-danger">Delete</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function (event) {
+                event.preventDefault();
+
+                var form = $(this);
+                var formData = form.serializeArray();
+
+                var modelData = {};
+                $.each(formData, function () {
+                    modelData[this.name] = this.value;
+                });
+
+                console.log(modelData);
+
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    contentType: 'application/json',  // Explicitly set content-type to JSON
+                    dataType: 'json',  // Expect JSON in response (optional)
+                    data: JSON.stringify(modelData),
+                    success: function (data) {
+                        alert("Success");
+                        location.reload();
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}
