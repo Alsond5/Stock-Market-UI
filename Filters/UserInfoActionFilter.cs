@@ -42,11 +42,7 @@ namespace StockMarketUI.Filters
             }
 
             var userInfo = JsonSerializer.Deserialize<UserInfo>(userInfoJson);
-
-            if (userInfo is null)
-            {
-                return false;
-            }
+            if (userInfo is null) return false;
 
             if (context.Controller is Controller controller)
             {

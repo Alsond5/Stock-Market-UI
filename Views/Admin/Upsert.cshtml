@@ -1,4 +1,6 @@
-@{}
+@{
+    var modelAction = ViewBag.ModelAction as string ?? "Add";
+}
 
 <div class="container mt-5">
     <h2>Change @ViewBag.Title</h2>
@@ -6,8 +8,15 @@
     <form method="post" class="needs-validation">
         @StockMarketUI.Helpers.HtmlHelper.RenderForm(Model)
 
-        <button type="submit" asp-action="upsert" class="btn btn-primary">Save</button>
-        <button type="submit" asp-action="delete" class="btn btn-danger">Delete</button>
+        @if (modelAction == "Add")
+        {
+            <button type="submit" asp-action="upsert" class="btn btn-primary">Add</button>
+        }
+        else
+        {
+            <button type="submit" asp-action="upsert" class="btn btn-primary">@modelAction</button>
+            <button type="submit" asp-action="delete" class="btn btn-danger">Delete</button>
+        }
     </form>
 </div>
 
